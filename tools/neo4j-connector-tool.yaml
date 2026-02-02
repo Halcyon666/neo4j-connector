@@ -1,0 +1,43 @@
+identity:
+  name: neo4j-connector
+  author: halcyon666
+  label:
+    en_US: Neo4j Query Executor
+    zh_Hans: Neo4j 查询执行器
+  icon: icon.svg
+
+description:
+  human:
+    en_US: Execute Cypher queries on Neo4j graph database
+    zh_Hans: 在 Neo4j 图数据库上执行 Cypher 查询
+  llm: A tool for executing Cypher queries on Neo4j graph database. Returns query results in JSON format.
+
+parameters:
+  - name: query
+    type: string
+    required: true
+    label:
+      en_US: Cypher Query
+      zh_Hans: Cypher 查询语句
+    human_description:
+      en_US: The Cypher query statement to execute on Neo4j database
+      zh_Hans: 要在 Neo4j 数据库上执行的 Cypher 查询语句
+    llm_description: The Cypher query to execute. Must be a valid Cypher query statement.
+    form: llm
+    
+  - name: max_results
+    type: number
+    required: false
+    default: 100
+    label:
+      en_US: Maximum Results
+      zh_Hans: 最大返回结果数
+    human_description:
+      en_US: Maximum number of results to return (default 100, max 1000)
+      zh_Hans: 返回结果的最大数量(默认 100,最大 1000)
+    llm_description: Limit the number of results returned by the query
+    form: form
+
+extra:
+  python:
+    source: tools/neo4j-connector.py

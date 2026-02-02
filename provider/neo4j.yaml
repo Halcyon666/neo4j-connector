@@ -1,0 +1,76 @@
+identity:
+  author: halcyon666
+  name: neo4j-connector
+  label:
+    en_US: Neo4j Database Connector
+    zh_Hans: Neo4j 数据库连接器
+  description:
+    en_US: Connect and query Neo4j graph databases
+    zh_Hans: 连接并查询 Neo4j 图数据库
+  icon: icon.svg
+  tags:
+    - utilities
+    - rag
+    - other
+
+credentials_schema:
+  - name: uri
+    type: text-input
+    required: true
+    label:
+      en_US: Neo4j URI
+      zh_Hans: Neo4j 连接地址
+    placeholder:
+      en_US: bolt://localhost:7687 or neo4j://localhost:7687
+      zh_Hans: bolt://localhost:7687 或 neo4j://localhost:7687
+    help:
+      en_US: The connection URI for your Neo4j database
+      zh_Hans: Neo4j 数据库的连接地址
+    default: neo4j://localhost:7687
+
+  - name: username
+    type: text-input
+    required: true
+    label:
+      en_US: Username
+      zh_Hans: 用户名
+    placeholder:
+      en_US: neo4j
+      zh_Hans: neo4j
+    help:
+      en_US: Neo4j database username
+      zh_Hans: Neo4j 数据库用户名
+    default: neo4j
+
+  - name: password
+    type: secret-input
+    required: true
+    label:
+      en_US: Password
+      zh_Hans: 密码
+    placeholder:
+      en_US: Enter your Neo4j password
+      zh_Hans: 输入 Neo4j 密码
+    help:
+      en_US: Neo4j database password
+      zh_Hans: Neo4j 数据库密码
+
+  - name: database
+    type: text-input
+    required: false
+    label:
+      en_US: Database Name
+      zh_Hans: 数据库名称
+    placeholder:
+      en_US: neo4j
+      zh_Hans: neo4j
+    help:
+      en_US: Optional database name (defaults to 'neo4j')
+      zh_Hans: 可选的数据库名称(默认为 'neo4j')
+    default: neo4j
+
+extra:
+  python:
+    source: provider/neo4j.py
+    tools:
+      - tools/neo4j-connector-tool.yaml

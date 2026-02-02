@@ -1,0 +1,29 @@
+version: 0.0.1
+type: plugin
+name: neo4j-connector
+author: halcyon666
+label:
+  en_US: Neo4j Connector
+  zh_Hans: Neo4j 连接器
+description:
+  en_US: Connect and query Neo4j graph databases using Cypher
+  zh_Hans: 使用 Cypher 连接和查询 Neo4j 图数据库
+icon: icon.svg
+created_at: 2024-01-01T00:00:00Z
+
+resource:
+  memory: 268435456
+
+plugins:
+  tools:
+    - provider/neo4j.yaml
+
+meta:
+  version: 0.0.1
+  arch:
+    - amd64
+    - arm64
+  runner:
+    language: python
+    version: "3.12"
+    entrypoint: main
