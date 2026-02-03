@@ -2,17 +2,57 @@ identity:
   name: neo4j-connector
   author: halcyon666
   label:
-    en_US: Neo4j Query Executor
-    zh_Hans: Neo4j 查询执行器
+    en_US: Neo4j Database Connector
+    zh_Hans: Neo4j 数据库连接器
   icon: icon.svg
 
 description:
   human:
-    en_US: Execute Cypher queries on Neo4j graph database
-    zh_Hans: 在 Neo4j 图数据库上执行 Cypher 查询
-  llm: A tool for executing Cypher queries on Neo4j graph database. Returns query results in JSON format.
+    en_US: Execute Cypher queries on Neo4j graph database (query, create, update, delete)
+    zh_Hans: 在 Neo4j 图数据库上执行 Cypher 查询（查询、创建、更新、删除）
+  llm: A tool for executing Cypher queries on Neo4j graph database. Supports read operations (query) and write operations (create, update, delete). Returns results in JSON format.
 
 parameters:
+  - name: operation_type
+    type: select
+    required: false
+    default: query
+    label:
+      en_US: Operation Type
+      zh_Hans: 操作类型
+    human_description:
+      en_US: Type of operation to perform (query, create, update, delete, write)
+      zh_Hans: 要执行的操作类型（查询、创建、更新、删除、写入）
+    llm_description: |
+      The type of operation to perform:
+      - query: Read data from database (MATCH, RETURN)
+      - create: Create new nodes or relationships (CREATE)
+      - update: Update existing nodes or relationships (SET, REMOVE)
+      - delete: Delete nodes or relationships (DELETE, DETACH DELETE)
+      - write: General write operation
+    form: form
+    options:
+      - value: query
+        label:
+          en_US: Query (Read)
+          zh_Hans: 查询（读取）
+      - value: create
+        label:
+          en_US: Create (Insert)
+          zh_Hans: 创建（插入）
+      - value: update
+        label:
+          en_US: Update (Modify)
+          zh_Hans: 更新（修改）
+      - value: delete
+        label:
+          en_US: Delete (Remove)
+          zh_Hans: 删除（移除）
+      - value: write
+        label:
+          en_US: Write (General)
+          zh_Hans: 写入（通用）
+    
   - name: query
     type: string
     required: true
@@ -33,11 +73,11 @@ parameters:
       en_US: Maximum Results
       zh_Hans: 最大返回结果数
     human_description:
-      en_US: Maximum number of results to return (default 100, max 1000)
-      zh_Hans: 返回结果的最大数量(默认 100,最大 1000)
-    llm_description: Limit the number of results returned by the query
+      en_US: Maximum number of results to return (default 100, max 1000). Only applies to query operations.
+      zh_Hans: 返回结果的最大数量(默认 100,最大 1000)。仅适用于查询操作。
+    llm_description: Limit the number of results returned by the query. Only applies to read operations.
     form: form
 
 extra:
   python:
-    source: tools/neo4j-connector.py
+    source: tools/neo4j_connector.py

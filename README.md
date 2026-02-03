@@ -57,7 +57,7 @@ cp .env.example .env
 # 编辑 .env 文件，填入你的 Dify 服务器信息
 
 # 运行插件
-python main.py
+python -m main
 ```
 
 #### 2. 配置连接
@@ -74,6 +74,7 @@ python main.py
 在你的 Dify 工作流或应用中添加 "Neo4j 查询执行器" 工具：
 
 **参数：**
+
 - **Cypher 查询语句**（必填）：要执行的 Cypher 查询
 - **最大返回结果数**（可选）：限制返回结果的数量，默认 100，最大 1000
 
@@ -87,7 +88,7 @@ MATCH (n) RETURN n LIMIT 10
 MATCH (p:Person) RETURN p.name, p.age
 
 // 查询关系
-MATCH (p:Person)-[r:KNOWS]->(f:Person) 
+MATCH (p:Person)-[r:KNOWS]->(f:Person)
 RETURN p.name, type(r), f.name
 
 // 创建节点
@@ -107,8 +108,8 @@ RETURN r
 {
   "status": "success",
   "results": [
-    {"n.name": "Alice", "n.age": 30},
-    {"n.name": "Bob", "n.age": 25}
+    { "n.name": "Alice", "n.age": 30 },
+    { "n.name": "Bob", "n.age": 25 }
   ],
   "count": 2,
   "summary": {
@@ -219,6 +220,7 @@ Configure Neo4j connection in Dify plugin page:
 Add "Neo4j Query Executor" tool to your Dify workflow or application:
 
 **Parameters:**
+
 - **Cypher Query** (required): The Cypher query to execute
 - **Maximum Results** (optional): Limit number of results, default 100, max 1000
 
@@ -232,7 +234,7 @@ MATCH (n) RETURN n LIMIT 10
 MATCH (p:Person) RETURN p.name, p.age
 
 // Query relationships
-MATCH (p:Person)-[r:KNOWS]->(f:Person) 
+MATCH (p:Person)-[r:KNOWS]->(f:Person)
 RETURN p.name, type(r), f.name
 
 // Create node
@@ -252,8 +254,8 @@ The tool returns results in JSON format:
 {
   "status": "success",
   "results": [
-    {"n.name": "Alice", "n.age": 30},
-    {"n.name": "Bob", "n.age": 25}
+    { "n.name": "Alice", "n.age": 30 },
+    { "n.name": "Bob", "n.age": 25 }
   ],
   "count": 2,
   "summary": {
