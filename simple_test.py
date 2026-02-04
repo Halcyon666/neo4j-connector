@@ -170,7 +170,7 @@ def run_tests():
     # Configuration - UPDATE THESE VALUES
     uri = "bolt://localhost:7687"
     username = "neo4j"
-    password = "your_password_here"
+    password = "password123"
     database = "neo4j"
     
     print(f"\nConfiguration:")

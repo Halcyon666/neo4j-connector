@@ -1,4 +1,4 @@
-# Neo4j 连接器 / Neo4j Connector
+# Neo4j Connector
 
 <div align="center">
 
@@ -6,178 +6,32 @@
 ![Version](https://img.shields.io/badge/version-0.0.1-green?style=flat-square)
 ![Dify Plugin](https://img.shields.io/badge/Dify-Plugin-orange?style=flat-square)
 
-**一个强大的 Dify 插件，用于连接和查询 Neo4j 图数据库**
+**A powerful Dify plugin for connecting and querying Neo4j graph databases**
 
-[English](#english) | [中文](#中文)
+English | [简体中文](README.zh-CN.md)
 
 </div>
 
 ---
 
-## 中文
-
-### 📖 简介
-
-Neo4j 连接器是一个专为 Dify 平台设计的插件，允许你在 AI 工作流和应用中直接执行 Cypher 查询，与 Neo4j 图数据库进行交互。
-
-### ✨ 特性
-
-- 🔗 **简单连接**：通过 URI、用户名和密码轻松连接到 Neo4j 数据库
-- 📊 **Cypher 查询**：支持执行任意 Cypher 查询语句
-- 🎯 **结果限制**：可配置返回结果的最大数量（默认 100，最大 1000）
-- 📈 **查询统计**：返回详细的查询统计信息（节点创建/删除、关系创建/删除等）
-- 🛡️ **错误处理**：完善的错误处理机制，包括认证错误、连接错误和查询错误
-- 🌐 **多语言支持**：支持中文和英文界面
-
-### 🚀 快速开始
-
-#### 1. 安装插件
-
-在 Dify 插件市场中搜索 "Neo4j 连接器" 并安装，或者通过调试模式安装：
-
-```bash
-# 克隆仓库
-git clone https://github.com/halcyon666/neo4j-connector.git
-cd neo4j-connector
-
-# 创建虚拟环境
-python -m venv .venv
-
-# 激活虚拟环境
-# Windows:
-.venv\Scripts\activate
-# Linux/Mac:
-source .venv/bin/activate
-
-# 安装依赖
-pip install -r requirements.txt
-
-# 配置环境变量
-cp .env.example .env
-# 编辑 .env 文件，填入你的 Dify 服务器信息
-
-# 运行插件
-python -m main
-```
-
-#### 2. 配置连接
-
-在 Dify 插件页面中配置 Neo4j 连接信息：
-
-- **Neo4j URI**: 你的 Neo4j 数据库地址（例如：`bolt://localhost:7687` 或 `neo4j://localhost:7687`）
-- **用户名**: Neo4j 数据库用户名（默认：`neo4j`）
-- **密码**: Neo4j 数据库密码
-- **数据库名称**: 可选，指定要连接的数据库（默认：`neo4j`）
-
-#### 3. 使用工具
-
-在你的 Dify 工作流或应用中添加 "Neo4j 查询执行器" 工具：
-
-**参数：**
-
-- **Cypher 查询语句**（必填）：要执行的 Cypher 查询
-- **最大返回结果数**（可选）：限制返回结果的数量，默认 100，最大 1000
-
-**示例查询：**
-
-```cypher
-// 查询所有节点
-MATCH (n) RETURN n LIMIT 10
-
-// 查询特定标签的节点
-MATCH (p:Person) RETURN p.name, p.age
-
-// 查询关系
-MATCH (p:Person)-[r:KNOWS]->(f:Person)
-RETURN p.name, type(r), f.name
-
-// 创建节点
-CREATE (p:Person {name: 'Alice', age: 30}) RETURN p
-
-// 创建关系
-MATCH (a:Person {name: 'Alice'}), (b:Person {name: 'Bob'})
-CREATE (a)-[r:KNOWS]->(b)
-RETURN r
-```
-
-### 📊 返回结果格式
-
-工具返回 JSON 格式的结果：
-
-```json
-{
-  "status": "success",
-  "results": [
-    { "n.name": "Alice", "n.age": 30 },
-    { "n.name": "Bob", "n.age": 25 }
-  ],
-  "count": 2,
-  "summary": {
-    "query_type": "r",
-    "counters": {
-      "nodes_created": 0,
-      "nodes_deleted": 0,
-      "relationships_created": 0,
-      "relationships_deleted": 0,
-      "properties_set": 0,
-      "labels_added": 0,
-      "labels_removed": 0
-    }
-  }
-}
-```
-
-### 🛠️ 技术栈
-
-- **Python 3.12+**
-- **Neo4j Python Driver 5.10.0+**
-- **Dify Plugin SDK 0.4.0+**
-
-### 📝 开发
-
-```bash
-# 安装开发依赖
-pip install -r requirements.txt
-
-# 运行测试
-python -m pytest
-
-# 代码格式化
-black .
-```
-
-### 🤝 贡献
-
-欢迎提交 Issue 和 Pull Request！
-
-### 📄 许可证
-
-MIT License
-
-### 👤 作者
-
-**halcyon666**
-
----
-
-## English
-
-### 📖 Introduction
+## 📖 Introduction
 
 Neo4j Connector is a powerful Dify plugin that enables you to connect and query Neo4j graph databases directly within your AI workflows and applications.
 
-### ✨ Features
+## ✨ Features
 
 - 🔗 **Easy Connection**: Connect to Neo4j databases with URI, username, and password
-- 📊 **Cypher Queries**: Execute any Cypher query statements
+- 📊 **Full Cypher Support**: Execute any Cypher query statements (query, create, update, delete)
 - 🎯 **Result Limiting**: Configure maximum number of results (default 100, max 1000)
 - 📈 **Query Statistics**: Returns detailed query statistics (nodes created/deleted, relationships created/deleted, etc.)
 - 🛡️ **Error Handling**: Comprehensive error handling for authentication, connection, and query errors
 - 🌐 **Multi-language**: Supports both Chinese and English interfaces
+- 🕐 **Temporal Type Support**: Automatically serializes Neo4j DateTime, Date, Time, Duration types to ISO format
+- 🔄 **Graph Object Support**: Automatically serializes Node and Relationship objects to JSON format
 
-### 🚀 Quick Start
+## 🚀 Quick Start
 
-#### 1. Install Plugin
+### 1. Install Plugin
 
 Search for "Neo4j Connector" in the Dify plugin marketplace, or install via debug mode:
 
@@ -203,10 +57,10 @@ cp .env.example .env
 # Edit .env file with your Dify server information
 
 # Run plugin
-python main.py
+python -m main
 ```
 
-#### 2. Configure Connection
+### 2. Configure Connection
 
 Configure Neo4j connection in Dify plugin page:
 
@@ -215,14 +69,20 @@ Configure Neo4j connection in Dify plugin page:
 - **Password**: Neo4j database password
 - **Database Name**: Optional, specify database to connect (default: `neo4j`)
 
-#### 3. Use Tool
+### 3. Use Tool
 
-Add "Neo4j Query Executor" tool to your Dify workflow or application:
+Add "Neo4j Database Connector" tool to your Dify workflow or application:
 
 **Parameters:**
 
+- **Operation Type** (optional): Select operation type
+  - `query` (Query/Read) - Default
+  - `create` (Create/Insert)
+  - `update` (Update/Modify)
+  - `delete` (Delete/Remove)
+  - `write` (Write/General)
 - **Cypher Query** (required): The Cypher query to execute
-- **Maximum Results** (optional): Limit number of results, default 100, max 1000
+- **Maximum Results** (optional): Limit number of results, default 100, max 1000 (only applies to query operations)
 
 **Example Queries:**
 
@@ -244,15 +104,30 @@ CREATE (p:Person {name: 'Alice', age: 30}) RETURN p
 MATCH (a:Person {name: 'Alice'}), (b:Person {name: 'Bob'})
 CREATE (a)-[r:KNOWS]->(b)
 RETURN r
+
+// Use temporal functions
+RETURN datetime() AS current_time, date() AS today
+
+// Update node properties
+MATCH (p:Person {name: 'Alice'})
+SET p.age = 31, p.updated_at = datetime()
+RETURN p
+
+// Delete node
+MATCH (p:Person {name: 'Alice'})
+DELETE p
 ```
 
-### 📊 Response Format
+## 📊 Response Format
 
 The tool returns results in JSON format:
+
+**Query Operation:**
 
 ```json
 {
   "status": "success",
+  "operation": "query",
   "results": [
     { "n.name": "Alice", "n.age": 30 },
     { "n.name": "Bob", "n.age": 25 }
@@ -273,13 +148,62 @@ The tool returns results in JSON format:
 }
 ```
 
-### 🛠️ Tech Stack
+**Write Operation (Create/Update/Delete):**
+
+```json
+{
+  "status": "success",
+  "operation": "create",
+  "query_type": "w",
+  "counters": {
+    "nodes_created": 1,
+    "nodes_deleted": 0,
+    "relationships_created": 0,
+    "relationships_deleted": 0,
+    "properties_set": 2,
+    "labels_added": 1,
+    "labels_removed": 0
+  },
+  "results": [
+    {
+      "p": {
+        "id": 123,
+        "labels": ["Person"],
+        "properties": {
+          "name": "Alice",
+          "age": 30
+        }
+      }
+    }
+  ],
+  "count": 1,
+  "message": "✅ Created 1 node(s) and 0 relationship(s)"
+}
+```
+
+**Temporal Type Serialization:**
+
+```json
+{
+  "status": "success",
+  "operation": "query",
+  "results": [
+    {
+      "current_time": "2024-01-15T10:30:00.123456+00:00",
+      "today": "2024-01-15"
+    }
+  ],
+  "count": 1
+}
+```
+
+## 🛠️ Tech Stack
 
 - **Python 3.12+**
 - **Neo4j Python Driver 5.10.0+**
 - **Dify Plugin SDK 0.4.0+**
 
-### 📝 Development
+## 📝 Development
 
 ```bash
 # Install development dependencies
@@ -292,15 +216,32 @@ python -m pytest
 black .
 ```
 
-### 🤝 Contributing
+## 🔧 Troubleshooting
+
+### Error: Graph not found: xxx
+
+**Cause**: The configured database name does not exist in your Neo4j instance.
+
+**Solution**:
+1. Check existing databases in Neo4j: `SHOW DATABASES`
+2. Use the correct database name in Dify plugin configuration (usually `neo4j`)
+3. Or leave the database name field empty to use the default database
+
+### Error: PydanticSerializationError: Unable to serialize unknown type
+
+**Cause**: Older plugin versions don't support Neo4j special types (DateTime, Node, etc.).
+
+**Solution**: Update to the latest version of the plugin, which now supports automatic serialization of all Neo4j types.
+
+## 🤝 Contributing
 
 Issues and Pull Requests are welcome!
 
-### 📄 License
+## 📄 License
 
 MIT License
 
-### 👤 Author
+## 👤 Author
 
 **halcyon666**
 

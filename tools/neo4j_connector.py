@@ -2,12 +2,52 @@ from collections.abc import Generator
 from typing import Any
 from neo4j import GraphDatabase
 from neo4j.exceptions import Neo4jError, ServiceUnavailable, AuthError
+from neo4j.time import DateTime, Date, Time, Duration
+from neo4j.graph import Node, Relationship
 
 from dify_plugin import Tool
 from dify_plugin.entities.tool import ToolInvokeMessage
 
 
 class Neo4jConnectorTool(Tool):
+    def _serialize_neo4j_value(self, value):
+        """
+        Convert Neo4j-specific types to JSON-serializable types
+        Handles: DateTime, Date, Time, Duration, Node, Relationship, and nested structures
+        """
+        # Handle Neo4j temporal types
+        if isinstance(value, (DateTime, Date, Time)):
+            return value.iso_format()
+        elif isinstance(value, Duration):
+            # Convert Duration to ISO 8601 duration string
+            return str(value)
+        
+        # Handle Neo4j graph types
+        elif isinstance(value, Node):
+            return {
+                "id": value.id,
+                "labels": list(value.labels),
+                "properties": {k: self._serialize_neo4j_value(v) for k, v in value.items()}
+            }
+        elif isinstance(value, Relationship):
+            return {
+                "id": value.id,
+                "type": value.type,
+                "start_node": value.start_node.id if value.start_node else None,
+                "end_node": value.end_node.id if value.end_node else None,
+                "properties": {k: self._serialize_neo4j_value(v) for k, v in value.items()}
+            }
+        
+        # Handle nested structures recursively
+        elif isinstance(value, dict):
+            return {k: self._serialize_neo4j_value(v) for k, v in value.items()}
+        elif isinstance(value, list):
+            return [self._serialize_neo4j_value(item) for item in value]
+        
+        # Return other types as-is (str, int, float, bool, None)
+        else:
+            return value
+
     def _invoke(self, tool_parameters: dict[str, Any]) -> Generator[ToolInvokeMessage, None, None]:
         """
         Execute a Cypher query on Neo4j database
@@ -93,7 +133,10 @@ class Neo4jConnectorTool(Tool):
             for record in result:
                 if count >= max_results:
                     break
-                records.append(dict(record))
+                # Serialize Neo4j types to JSON-compatible format
+                record_dict = dict(record)
+                serialized_record = {k: self._serialize_neo4j_value(v) for k, v in record_dict.items()}
+                records.append(serialized_record)
                 count += 1
             
             # 获取查询统计信息
@@ -139,7 +182,10 @@ class Neo4jConnectorTool(Tool):
                 # 先收集返回的记录（如果有 RETURN 子句）
                 records = []
                 for record in result:
-                    records.append(dict(record))
+                    # Serialize Neo4j types to JSON-compatible format
+                    record_dict = dict(record)
+                    serialized_record = {k: self._serialize_neo4j_value(v) for k, v in record_dict.items()}
+                    records.append(serialized_record)
                 
                 # 然后获取统计信息
                 summary = result.consume()
